@@ -1,0 +1,13 @@
+# Create a new environment using Ansible Roles. This will create all the Fabric Access Policies, the associated
+# Tenant policies (AP, EPGs, VRF, BD, etc.) and an L3Out to connect to an upstream NX-OS device.
+---
+- name: Create a new environment with Ansible roles
+  hosts: apic1
+  connection: local
+  gather_facts: false
+
+  roles:
+    - access_policies
+    - tenant
+    - L3Out
+    - static_path

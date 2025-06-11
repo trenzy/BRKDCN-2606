@@ -1,0 +1,42 @@
+# vars file for tenant
+---
+tenant: CiscoLive
+vrf: cl_vrf
+bridge_domains:
+  - name: web-bd
+    ip: 10.1.1.1
+    mask: 24
+  - name: app-bd
+    ip: 10.1.2.1
+    mask: 24
+  - name: db-bd
+    ip: 10.1.3.1
+    mask: 24
+app_profile:
+  name: cl_ap
+  endpoint_groups:
+    - name: web
+      provided: web_to_app
+      consumed: permit_any
+    - name: app
+      provided: app_to_db
+      consumed: web_to_app
+    - name: db
+      consumed: app_to_db
+contracts:
+  - name: web_to_app
+    filter: allow_https
+  - name: app_to_db
+    filter: allow_sql
+  - name: permit_any
+    filter: allow_any
+filters:
+  - name: allow_https
+    ip_protocol: tcp
+    port: 443
+  - name: allow_sql
+    port: 1433
+    ip_protocol: tcp
+  - name: allow_any
+    port: unspecified
+    ip_protocol: unspecified

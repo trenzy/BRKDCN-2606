@@ -1,0 +1,205 @@
+---
+- name: Add a new VLAN pool (fvns:VlanInstP)
+  cisco.aci.aci_vlan_pool:
+    pool: "{{ item.pool_name }}"
+    pool_allocation_mode: static
+    description: Created with Ansible
+    use_ssl: true
+    validate_certs: false
+    state: present
+  loop: "{{ access_policy }}"
+
+- name: Add a new VLAN encap block (fvns:EncapBlk)
+  cisco.aci.aci_vlan_pool_encap_block:
+    allocation_mode: static
+    pool: "{{ item.pool_name }}"
+    name: cl-block
+    pool_mode: static
+    block_start: "{{ item.start_range }}"
+    block_end: "{{ item.end_range }}"
+    use_ssl: true
+    validate_certs: false
+    state: present
+  loop: "{{ access_policy }}"
+
+- name: Add a new domain (phys:DomP)
+  cisco.aci.aci_domain:
+    domain: "{{ item.domain_name }}"
+    domain_type: "{{ item.domain_type_name }}"
+    use_ssl: true
+    validate_certs: false
+    state: present
+  loop: "{{ access_policy }}"
+
+- name: Bind a domain to VLAN pool (infra:RsVlanNs)
+  cisco.aci.aci_domain_to_vlan_pool:
+    domain: "{{ item.domain_name}}"
+    domain_type: "{{ item.domain_type_name }}"
+    pool: "{{ item.pool_name }}"
+    pool_allocation_mode: static
+    use_ssl: true
+    validate_certs: false
+    state: present
+  loop: "{{ access_policy }}"
+
+- name: Add a new vlan pool to encap (fvns:VlanInstP)
+  cisco.aci.aci_encap_pool:
+    pool: "{{ item.pool_name }}"
+    pool_allocation_mode: static
+    pool_type: vlan
+    description: Created with Ansible
+    use_ssl: true
+    validate_certs: false
+    state: present
+  loop: "{{ access_policy }}"
+
+- name: Add domain to VLAN pool binding (infra:RsVlanNs)
+  cisco.aci.aci_domain_to_encap_pool:
+    domain: "{{ item.domain_name }}"
+    domain_type: "{{ item.domain_type_name }}"
+    pool: "{{ item.pool_name }}"
+    pool_type: vlan
+    pool_allocation_mode: static
+    use_ssl: true
+    validate_certs: false
+    state: present
+  loop: "{{ access_policy }}"
+
+- name: Add a new AEP (infra:AttEntityP, infra:ProvAcc)
+  cisco.aci.aci_aep:
+    aep: "{{ item.aaep_name }}"
+    description: Created by Ansible
+    use_ssl: true
+    validate_certs: false
+    state: present
+  loop: "{{ access_policy }}"
+
+- name: Add AEP to domain binding (infra:RsDomP)
+  cisco.aci.aci_aep_to_domain: &binding_present
+    aep: "{{ item.aaep_name }}"
+    domain: "{{ item.domain_name }}"
+    domain_type: "{{ item.domain_type_name }}"
+    use_ssl: true
+    validate_certs: false
+    state: present
+  loop: "{{ access_policy }}"
+
+- name: Create CDP Test Policy (cdp:IfPol)
+  cisco.aci.aci_interface_policy_cdp:
+    name: "{{ cdp_policy_name }}"
+    admin_state: true
+    use_ssl: true
+    validate_certs: false
+    state: present
+
+- name: Create LLDP interface policy (lldp:IfPol)
+  cisco.aci.aci_interface_policy_lldp:
+    lldp_policy: "{{ lldp_policy_name }}"
+    receive_state: true
+    transmit_state: true
+    use_ssl: true
+    validate_certs: false
+    state: present
+
+- name: Add a Link Level Policy
+  cisco.aci.aci_interface_policy_link_level:
+    link_level_policy: "{{ link_speed_policy_name }}"
+    description: Configured with Ansible
+    auto_negotiation: 'on'
+    speed: 10G
+    link_debounce_interval: 100
+    use_ssl: true
+    validate_certs: false
+    state: present
+
+- name: Create a Leaf Access Port Policy Group
+  cisco.aci.aci_interface_policy_leaf_policy_group:
+    lag_type: leaf
+    policy_group: "{{ item.policy_group_name }}"
+    cdp_policy: "{{ cdp_policy_name }}"
+    lldp_policy: "{{ lldp_policy_name }}"
+    link_level_policy: "{{ link_speed_policy_name }}"
+    aep: "{{ item.aaep_name }}"
+    use_ssl: true
+    validate_certs: false
+    state: present
+  loop: "{{ access_policy }}"
+ 
+- name: Add a new leaf_interface_profile (infra:AccPortP)
+  cisco.aci.aci_interface_policy_leaf_profile:
+    leaf_interface_profile: "{{ item.leaf_int_prof }}"
+    # leaf_interface_profile: "{{ item.leaf_prof }}"
+    use_ssl: true
+    validate_certs: false
+    state: present
+  loop: "{{ leaf_info }}"
+
+- name: Adding a switch policy leaf profile selector
+  cisco.aci.aci_switch_leaf_selector:
+    # leaf_profile: "{{ item.leaf_selector }}"
+    leaf_profile: "{{ item.leaf_prof }}"
+    # leaf: "{{ item.leaf_prof }}"
+    leaf: "{{ item.leaf_selector }}"
+    # leaf_node_blk: "{{ item.leaf_id }}"
+    leaf_node_blk: "{{ item.leaf_node_blk }}"
+    from: "{{ item.leaf_id }}"
+    to: "{{ item.leaf_id }}"
+    policy_group: "{{ link_speed_policy_name }}"
+    use_ssl: true
+    validate_certs: false
+    state: present
+  loop: "{{ leaf_info }}"
+
+- name: Int Access Port Selector to a Int Policy Leaf Profile w/Policy Group
+  cisco.aci.aci_access_port_to_interface_policy_leaf_profile:
+    leaf_interface_profile: "{{ item.leaf_int_prof }}"
+    access_port_selector: "{{ item.access_port_name }}"
+    policy_group: "{{ item.policy_group_name }}"
+    use_ssl: true
+    validate_certs: false
+    state: present
+  loop: "{{ leaf_info }}"
+
+- name: Associate an access port to an interface selector
+  cisco.aci.aci_access_port_block_to_access_port:
+    leaf_interface_profile: "{{ item.leaf_int_prof }}"
+    access_port_selector: "{{ item.access_port_name }}"
+    # leaf_port_blk: "{{ item.leaf_id }}"
+    leaf_port_blk: "{{ item.leaf_node_blk}}"
+    from_port: "{{ item.from_port }}"
+    to_port: "{{ item.to_port }}"
+    use_ssl: true
+    validate_certs: false
+    state: present
+  loop: "{{ leaf_info }}"
+ 
+# - name: Int Access Port Selector to a Int Policy Leaf Profile w/Policy Group
+#   cisco.aci.aci_access_port_to_interface_policy_leaf_profile:
+#     leaf_interface_profile: "{{ item.leaf_int_prof }}"
+#     access_port_selector: "{{ item.access_port_name }}"
+#     policy_group: "{{ link_speed_policy_name }}"
+#     use_ssl: true
+#     validate_certs: false
+#     state: present
+#   loop: "{{ leaf_info }}"
+
+# - name: Associate an interface selector profile to a switch policy leaf profile
+#   cisco.aci.aci_interface_selector_to_switch_policy_leaf_profile:
+#     leaf_profile: "{{ item.leaf_prof }}"
+#     interface_selector: "{{ item.leaf_int_prof }}"
+#     use_ssl: true
+#     validate_certs: false
+#     state: present
+#   loop: "{{ leaf_info }}"
+ 
+# - name: Associate an access port to an interface selector
+#   cisco.aci.aci_access_port_block_to_access_port:
+#     leaf_interface_profile: tr-int-prof-101-1-7
+#     access_port_selector: 101-1-37
+#     leaf_port_blk: 101
+#     from_port: "7"
+#     to_port: "7"
+#     use_ssl: true
+#     validate_certs: no
+#     state: present
+# 

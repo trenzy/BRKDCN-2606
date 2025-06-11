@@ -1,0 +1,27 @@
+---
+- name: Add the physical domain to EPG binding
+  cisco.aci.aci_epg_to_domain:
+    tenant: '{{ tenant_name }}'
+    ap: '{{ ap_name }}'
+    epg: '{{ epg_name }}'
+    domain: cl_phys_domain
+    domain_type: phys
+    use_ssl: true
+    validate_certs: no
+    state: present
+
+- name: deploy static path binding for an EPG
+  cisco.aci.aci_static_binding_to_epg:
+    tenant: '{{ tenant_name }}'
+    ap: '{{ ap_name }}'
+    epg: '{{ epg_name }}'
+    encap_id: '{{ encap_id }}'
+    deploy_immediacy: '{{ deploy_name }}'
+    interface_mode: '{{ int_mode }}'
+    interface_type: '{{ int_type }}'
+    pod_id: '{{ pod_id }}'
+    leafs: '{{ leaf }}'
+    interface: '{{ int }}'
+    use_ssl: true
+    validate_certs: no
+    state: present

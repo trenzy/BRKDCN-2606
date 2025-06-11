@@ -1,0 +1,15 @@
+# vars file for tenant
+---
+tenant: CiscoLive
+L3Out: cl_l3out
+node_prof: cl_102_node_prof
+int_prof: cl_l3out_int_prof
+vrf: cl_vrf
+l3_dom: cl_l3out_phys_domain
+pod_id: 1
+node_id: 102
+
+bridge_domains:
+    - name: web-bd
+    - name: app-bd
+    - name: db-bd

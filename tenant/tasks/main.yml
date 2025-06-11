@@ -1,0 +1,144 @@
+# tasks file for tenant
+---
+- name: Create Tenant
+  cisco.aci.aci_tenant:
+    tenant: "{{ tenant }}"
+    description: "Tenant configured by Ansible"
+    use_ssl: true
+    validate_certs: false
+    state: present
+
+- name: Create VRF
+  cisco.aci.aci_vrf:
+    tenant: "{{ tenant }}"
+    vrf: "{{ vrf }}"
+    use_ssl: true
+    validate_certs: false
+    state: present
+
+- name: Create AP
+  cisco.aci.aci_ap:
+    tenant: "{{ tenant }}"
+    ap: "{{ app_profile.name }}"
+    description: "App Profile configured by Ansible"
+    use_ssl: true
+    validate_certs: false
+    state: present
+
+- name: Create Bridge Domain
+  cisco.aci.aci_bd:
+    tenant: "{{ tenant }}"
+    bd: "{{ item.name }}"
+    vrf: "{{ vrf }}"
+    description: "Bridge Domain create by Ansible"
+    validate_certs: false
+    use_ssl: true
+    state: present
+  loop: "{{ bridge_domains }}"
+
+- name: Create Bridge Domain subnets
+  cisco.aci.aci_bd_subnet:
+    tenant: "{{ tenant }}"
+    bd: "{{ item.name }}"
+    gateway: "{{ item.ip }}"
+    mask: "{{ item.mask }}"
+    validate_certs: false
+    use_ssl: true
+    state: present
+  loop: "{{ bridge_domains }}"
+
+- name: Create EPGs
+  cisco.aci.aci_epg:
+    tenant: "{{ tenant }}"
+    ap: "{{ app_profile.name }}"
+    epg: "{{ item.name }}"
+    bd: "{{ item.name }}-bd"
+    description: "EPG configured by Ansible"
+    validate_certs: false
+    use_ssl: true
+    state: present
+  loop: "{{ app_profile.endpoint_groups }}"
+
+- name: Bind Provided Contract to EPGs
+  cisco.aci.aci_epg_to_contract:
+    tenant: "{{ tenant }}"
+    epg: "{{ item.name }}"
+    ap: "{{ app_profile.name }}"
+    contract: "{{ item.provided }}"
+    contract_type: provider
+    validate_certs: false
+    use_ssl: true
+    state: present
+  when: "item.provided is defined"
+  loop: "{{ app_profile.endpoint_groups }}"
+
+- name: Bind Consumed Contract to EPGs
+  cisco.aci.aci_epg_to_contract:
+    tenant: "{{ tenant }}"
+    epg: "{{ item.name }}"
+    ap: "{{ app_profile.name }}"
+    contract: "{{ item.consumed }}"
+    contract_type: consumer
+    validate_certs: false
+    use_ssl: true
+    state: present
+  when: "item.consumed is defined"
+  loop: "{{ app_profile.endpoint_groups }}"
+
+- name: Create Filters
+  cisco.aci.aci_filter:
+    filter: "{{ item.name }}"
+    tenant: "{{ tenant }}"
+    description: "Filter created by Ansible"
+    validate_certs: false
+    use_ssl: true
+    state: present
+  loop: "{{ filters }}"
+
+- name: Add Filter Entry to Filters
+  cisco.aci.aci_filter_entry:
+    entry: "{{ item.name | replace('allow_', '') }}"
+    tenant: "{{ tenant }}"
+    ether_type: ip
+    ip_protocol: "{{ item.ip_protocol }}"
+    dst_port: "{{ item.port }}"
+    filter: "{{ item.name }}"
+    description: "Filter Entry created by Ansible"
+    validate_certs: false
+    state: present
+    use_ssl: true
+  loop: "{{ filters }}"
+
+- name: Creating Contracts
+  cisco.aci.aci_contract:
+    contract: "{{ item.name }}"
+    tenant: "{{ tenant }}"
+    scope: "context"
+    description: "Contract created by Ansible"
+    validate_certs: false
+    use_ssl: true
+    state: present
+  loop: "{{ contracts }}"
+
+- name: Bind Subjects to Contracts
+  cisco.aci.aci_contract_subject:
+    tenant: "{{ tenant }}"
+    contract: "{{ item.name }}"
+    subject: "{{ item.name }}_subject"
+    reverse_filter: true
+    description: "Subject created by Ansible"
+    validate_certs: false
+    use_ssl: true
+    state: present
+  loop: "{{ contracts }}"
+
+- name: Bind Contracts Subjects to filter
+  cisco.aci.aci_contract_subject_to_filter:
+    tenant: "{{ tenant }}"
+    contract: "{{ item.name }}"
+    filter: "{{ item.filter }}"
+    subject: "{{ item.name }}_subject"
+    validate_certs: false
+    use_ssl: true
+    state: present
+  loop: "{{ contracts }}"

@@ -1,0 +1,56 @@
+# vars file for access_policies
+---
+access_policy:
+  - pool_name: cl_l3out_vlan_pool
+    start_range: 1260
+    end_range: 1269
+    domain_name: cl_l3out_phys_domain
+    domain_type_name: l3dom
+    aaep_name: cl_l3out_aaep
+    policy_group_name: cl-l3out-policy-group
+  - pool_name: cl_vlan_pool
+    start_range: 1250
+    end_range: 1259
+    domain_name: cl_phys_domain
+    domain_type_name: phys
+    aaep_name: cl_phys_aaep
+    policy_group_name: cl-phys-policy-group
+
+# Access Port Block names
+access_port_block_101_name: cl_port_block_leaf_101
+access_port_block_102_name: cl_port_block_leaf_102
+
+# CDP policy name
+cdp_policy_name: cl_cdp_enable
+
+# LLDP policy name
+lldp_policy_name: cl_lldp_on
+
+# Link Access Policies
+link_speed_policy_name: cl_10G_ON
+
+# Link Speed policy
+link_speed_10G: 10G
+
+# Leaf info
+leaf_info:
+  - leaf_prof: Leaf101_Prof
+    leaf_int_prof: Leaf101_IntProf
+    leaf_selector: leaf_selector_101
+    # leaf_node_blk: 33
+    leaf_node_blk: leaf_block_101
+    leaf_id: 101
+    from_port: 33
+    to_port: 33
+    access_port_name: E1_33
+    policy_group_name: cl-phys-policy-group
+  - leaf_prof: Leaf102_Prof
+    leaf_int_prof: Leaf102_IntProf
+    leaf_selector: leaf_selector_102
+    # leaf_node_blk: 39
+    leaf_node_blk: leaf_block_102
+    leaf_id: 102
+    from_port: 39
+    to_port: 39
+    access_port_name: E1_39
+    policy_group_name: cl-l3out-policy-group
