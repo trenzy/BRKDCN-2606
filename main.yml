@@ -6,6 +6,12 @@
   connection: local
   gather_facts: false
 
+  module_defaults:
+    group/cisco.aci.all:
+      use_ssl: true
+      validate_certs: false
+      state: present
+
   roles:
     - access_policies
     - tenant

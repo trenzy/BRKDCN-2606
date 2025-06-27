@@ -6,9 +6,6 @@
     epg: '{{ epg_name }}'
     domain: cl_phys_domain
     domain_type: phys
-    use_ssl: true
-    validate_certs: no
-    state: present
 
 - name: deploy static path binding for an EPG
   cisco.aci.aci_static_binding_to_epg:
@@ -22,6 +19,3 @@
     pod_id: '{{ pod_id }}'
     leafs: '{{ leaf }}'
     interface: '{{ int }}'
-    use_ssl: true
-    validate_certs: no
-    state: present

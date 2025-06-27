@@ -7,9 +7,6 @@
     domain: "{{ l3_dom }}"
     vrf: "{{ vrf }}"
     l3protocol: static
-    use_ssl: true
-    validate_certs: false
-    state: present
 
 - name: Create a new node profile
   cisco.aci.aci_l3out_logical_node_profile:
@@ -17,9 +14,6 @@
     l3out: '{{ L3Out }}'
     node_profile: '{{ node_prof }}'
     description: Created by Ansible
-    use_ssl: true
-    validate_certs: false
-    state: present
 
 - name: Add a node to a node profile
   cisco.aci.aci_l3out_logical_node:
@@ -30,9 +24,6 @@
     node_id: "{{ node_id }}"
     router_id: 10.20.30.40
     router_id_as_loopback: true
-    use_ssl: true
-    validate_certs: false
-    state: present
 
 - name: Create a new interface profile
   cisco.aci.aci_l3out_logical_interface_profile:
@@ -40,9 +31,6 @@
     l3out: '{{ L3Out }}'
     node_profile: '{{ node_prof }}'
     interface_profile: '{{ int_prof }}'
-    use_ssl: true
-    validate_certs: false
-    state: present
 
 - name: Create a routed interface
   cisco.aci.aci_l3out_interface:
@@ -55,9 +43,6 @@
     path_ep: eth1/39
     interface_type: l3-port
     addr: 10.255.255.1/30
-    use_ssl: true
-    validate_certs: false
-    state: present
 
 - name: Add a new External Epg
   cisco.aci.aci_l3out_extepg:
@@ -65,9 +50,6 @@
     l3out: '{{ L3Out }}'
     name: ext-epg
     description: Created by Ansible
-    use_ssl: true
-    validate_certs: false
-    state: present
 
 - name: Bind a contract to the External EPG
   cisco.aci.aci_l3out_extepg_to_contract:
@@ -76,9 +58,6 @@
     extepg: ext-epg
     contract: permit_any
     contract_type: provider
-    use_ssl: true
-    validate_certs: false
-    state: present
 
 - name: Add an External Subnet
   cisco.aci.aci_l3out_extsubnet:
@@ -88,9 +67,6 @@
     description: Created with Ansible
     network: 0.0.0.0/0
     scope: import-security
-    use_ssl: true
-    validate_certs: false
-    state: present
 
 - name: Create a static route
   cisco.aci.aci_l3out_static_routes:
@@ -100,9 +76,6 @@
     node_id: "{{ node_id }}"
     pod_id: "{{ pod_id }}"
     prefix: 0.0.0.0/0
-    use_ssl: true
-    validate_certs: false
-    state: present
 
 - name: Add a next hop for the static route we created
   cisco.aci.aci_l3out_static_routes_nexthop:
@@ -113,16 +86,10 @@
     node_id: "{{ node_id }}"
     prefix: 0.0.0.0/0
     nexthop: 10.255.255.2
-    use_ssl: true
-    validate_certs: false
-    state: present
 
 - name: Associate Bridge Domain to L3 Out
   cisco.aci.aci_bd_to_l3out:
     bd: "{{ item.name }}"
     l3out: "{{ L3Out }}"
     tenant: "{{ tenant }}"
-    use_ssl: true
-    validate_certs: false
-    state: present
   loop: "{{ bridge_domains }}"

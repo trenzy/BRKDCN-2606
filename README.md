@@ -17,7 +17,7 @@ If you plan to modify this code as the environment this was developed and run on
 
 ## Installing Ansible
 
-To install Ansible, please visit the [repository site](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
+To install Ansible, please visit the following [site](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
 
 It is recommended to use a virtual environment with Ansible if running it on a local system.
 
