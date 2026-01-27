@@ -7,15 +7,44 @@
     domain: cl_phys_domain
     domain_type: phys
 
+# - name: deploy static path binding for an EPG
+#   cisco.aci.aci_static_binding_to_epg:
+#     tenant: '{{ tenant_name }}'
+#     ap: '{{ ap_name }}'
+#     epg: '{{ epg_name }}'
+#     encap_id: '{{ encap_id }}'
+#     deploy_immediacy: '{{ deploy_name }}'
+#     interface_mode: '{{ int_mode }}'
+#     interface_type: '{{ int_type }}'
+#     pod_id: '{{ pod_id }}'
+#     leafs: '{{ leaf }}'
+#     interface: '{{ int }}'
+#
+# Read a CSV file and access Tenant csv
+- name: Read data from CSV file to be used to configure ACI
+  community.general.read_csv:
+    path: "{{ csv_role_path }}/files/ports.csv"
+  register: ports
+
+# - name: Add the physical domain to EPG binding
+#   cisco.aci.aci_epg_to_domain:
+#     tenant: '{{ item.tenant }}'
+#     ap: '{{ item.ap }}'
+#     epg: '{{ item.epg }}'
+#     domain: cl_phys_domain
+#     domain_type: phys
+#   loop: '{{ ports.list }}'
+
 - name: deploy static path binding for an EPG
   cisco.aci.aci_static_binding_to_epg:
-    tenant: '{{ tenant_name }}'
-    ap: '{{ ap_name }}'
-    epg: '{{ epg_name }}'
-    encap_id: '{{ encap_id }}'
-    deploy_immediacy: '{{ deploy_name }}'
-    interface_mode: '{{ int_mode }}'
-    interface_type: '{{ int_type }}'
-    pod_id: '{{ pod_id }}'
-    leafs: '{{ leaf }}'
-    interface: '{{ int }}'
+    tenant: '{{ item.tenant }}'
+    ap: '{{ item.ap }}'
+    epg: '{{ item.epg }}'
+    encap_id: '{{ item.encap_id }}'
+    deploy_immediacy: '{{ item.deploy }}'
+    interface_mode: '{{ item.int_mode }}'
+    interface_type: '{{ item.int_type }}'
+    pod_id: '{{ item.pod_id }}'
+    leafs: '{{ item.leaf }}'
+    interface: '{{ item.int }}'
+  loop: '{{ ports.list }}'

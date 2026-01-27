@@ -1,0 +1,4 @@
+tenant,ap,epg,encap_id,deploy,int_mode,int_type,pod_id,leaf,int,state
+CiscoLive,cl_ap,web,121,immediate,access,switch_port,1,101,1/7,present
+CiscoLive,cl_ap,web,122,lazy,access,switch_port,1,102,1/7,present
+CiscoLive,cl_ap,web,1252,lazy,access,switch_port,1,101,1/33,present
