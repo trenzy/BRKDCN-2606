@@ -14,12 +14,11 @@ This was developed and tested with Ansible version 2.18.4 and latest version of 
 
 If you plan to modify this code as the environment this was developed and run on may be different than what you want to run this playbook against.
 
-
 ## Installing Ansible
 
-To install Ansible, please visit the following [site](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
+Ansible requires that Python be installed on the control system where you will run your playbooks. It's recommended that you do this in a Python virtual environment. You can use `pyenv` to install multiple versions fo Python. You can install it [here](https://github.com/pyenv/pyenv?tab=readme-ov-file)
 
-It is recommended to use a virtual environment with Ansible if running it on a local system.
+To install Ansible, please visit the following [site](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
 
 ## Clone this git repository
 
