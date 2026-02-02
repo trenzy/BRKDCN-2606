@@ -7,7 +7,9 @@ Here are the packet captures that were used to show how Ansible authenticates.
 
 In order to capture this, I needed to do a couple of different things:
 
-1: Turn on HTTP on the ACI APIC
-2: Use `use_ssl: false` in order to turn off using Secure Sockets for the REST API calls.
+1) Turn on HTTP on the ACI APIC
+2) Use `use_ssl: false` in order to turn off using Secure Sockets for the REST API calls.
 
-Username/Password are local to the APIC.
+Username/Password are local to the APIC. Because we're not using SSL, you will be able to see the username/password in the packet capture.
+
+**Never turn on the HTTP server in the ACI APIC for production fabrics**
