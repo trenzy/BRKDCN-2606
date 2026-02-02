@@ -2,8 +2,8 @@
 
 Here are the packet captures that were used to show how Ansible authenticates. 
 
-- ansible_three_tier.pcap: Packet capture showing how Ansible authenticates **Every** task!
-- ansible_three_tier_http_api.pcap: Packet capture that shows how Ansible authenticates once via the HTTP API plugin.
+- `ansible_three_tier.pcap`: Packet capture showing how Ansible authenticates **Every** task!
+- `ansible_three_tier_http_api.pcap`: Packet capture that shows how Ansible authenticates once via the HTTP API plugin.
 
 In order to capture this, I needed to do a couple of different things:
 
