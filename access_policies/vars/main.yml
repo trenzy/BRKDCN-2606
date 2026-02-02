@@ -7,14 +7,14 @@ access_policy:
     domain_name: cl_l3out_phys_domain
     domain_type_name: l3dom
     aaep_name: cl_l3out_aaep
-    policy_group_name: cl-l3out-policy-group
+    policy_group_name: cl_l3out_policy_group
   - pool_name: cl_vlan_pool
     start_range: 1250
     end_range: 1259
     domain_name: cl_phys_domain
     domain_type_name: phys
     aaep_name: cl_phys_aaep
-    policy_group_name: cl-phys-policy-group
+    policy_group_name: cl_phys_policy_group
 
 # Access Port Block names
 access_port_block_101_name: cl_port_block_leaf_101
@@ -43,7 +43,7 @@ leaf_info:
     from_port: 33
     to_port: 33
     access_port_name: E1_33
-    policy_group_name: cl-phys-policy-group
+    policy_group_name: cl_phys_policy_group
   - leaf_prof: Leaf102_Prof
     leaf_int_prof: Leaf102_IntProf
     leaf_selector: leaf_selector_102
@@ -53,4 +53,4 @@ leaf_info:
     from_port: 39
     to_port: 39
     access_port_name: E1_39
-    policy_group_name: cl-l3out-policy-group
+    policy_group_name: cl_l3out_policy_group

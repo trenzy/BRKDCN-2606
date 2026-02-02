@@ -2,14 +2,6 @@
 tenant_name: CiscoLive
 ap_name: cl_ap
 epg_name: web
-# encap_id: 1252
-# deploy_name: immediate 
-# int_mode: access
-# int_type: switch_port
-# pod_id: 1
-# leaf: 101
-# int: 1/33
-# domain_name: cl_phys_domain
 
 # Variable for full path needed for read_csv module in this role
 csv_role_path: "/Users/threnzy/Ansible/ACI/BRKDCN-2606/static_path"

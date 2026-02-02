@@ -37,11 +37,12 @@ If you don't have it installed, you should download the latest ACI collection fr
 ansible-galaxy collection install cisco.aci
 ```
 
-To run this Ansible playbook, you first need to set the Environment Variable from the OS:
+To run this Ansible playbook, you first need to set the Environment Variable from the OS for authentication and the APIC IP:
 
 ```bash
-export ACI_USERNAME=<username>
-export ACI_PASSWORD=<password>
+export APIC_USERNAME=<username>
+export APIC_PASSWORD=<password>
+export APIC_IP=<password>
 ```
 
 Then run your Ansible playbook against your target system:
@@ -49,3 +50,5 @@ Then run your Ansible playbook against your target system:
 ```bash
 ansible-playbook -i hosts.ini main.yml
 ```
+
+During the session, I should a couple of packet captures that highlight the differences between regular username/password and HTTP API (which is what is configured here). You can view those in Wireshark and they are located in the `packet_captures` directory.

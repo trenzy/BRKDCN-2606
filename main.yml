@@ -2,7 +2,7 @@
 # Tenant policies (AP, EPGs, VRF, BD, etc.) and an L3Out to connect to an upstream NX-OS device.
 ---
 - name: Create a new environment with Ansible roles
-  hosts: apic1
+  hosts: apic
   connection: local
   gather_facts: false
 
