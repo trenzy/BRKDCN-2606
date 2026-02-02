@@ -2,13 +2,13 @@
 
 This repository is built to support the Cisco Live breakout session BRKDCN-2606. This repository contains 4 separate directories with an Ansible Role.
 
-- 1 `access_policies` which configures ACI Fabric access policies for both end points (and EPGs) in our Tenant as well as for an L3Out which will be used to connect to an upstream NX-OS device
+1) `access_policies` which configures ACI Fabric access policies for both end points (and EPGs) in our Tenant as well as for an L3Out which will be used to connect to an upstream NX-OS device
 
-- 2 `tenant` which provisions a ACI Tenant and associated child policies (VRF, Bridge-Domain, BD Subnet, etc.)
+2) `tenant` which provisions a ACI Tenant and associated child policies (VRF, Bridge-Domain, BD Subnet, etc.)
 
-- 3 `L3Out` which provisions an L3Out to an external NX-OS switch to show reachability from a host in the Tenant.
+3) `L3Out` which provisions an L3Out to an external NX-OS switch to show reachability from a host in the Tenant.
 
-- 4 `static_path` which configures the static path bindings for the hosts in the newly created Tenant and EPG.
+4) `static_path` which configures the static path bindings for the hosts in the newly created Tenant and EPG.
 
 This was developed and tested with Ansible version 2.18.4 and latest version of the Ansible ACI collection (2.10.1 at the time this was developed).
 
