@@ -24,7 +24,7 @@
 
 - name: Bind a domain to VLAN pool (infra:RsVlanNs)
   cisco.aci.aci_domain_to_vlan_pool:
-    domain: "{{ item.domain_name}}"
+    domain: "{{ item.domain_name }}"
     domain_type: "{{ item.domain_type_name }}"
     pool: "{{ item.pool_name }}"
     pool_allocation_mode: static
